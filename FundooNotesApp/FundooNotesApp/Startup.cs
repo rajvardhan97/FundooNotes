@@ -37,14 +37,33 @@ namespace FundooNotesApp
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
 
-            services.AddSwaggerGen(swagger =>
+            services.AddSwaggerGen(opt =>
             {
-                swagger.SwaggerDoc("v1", new OpenApiInfo
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Version = "v1",
-                    Title = "FundooNotes",
-                    Description = "ASP.NET Core Web API"
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
                 });
+
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
             });
         }
 
