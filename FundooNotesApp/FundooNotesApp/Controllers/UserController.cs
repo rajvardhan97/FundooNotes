@@ -84,5 +84,30 @@ namespace FundooNotesApp.Controllers
                 throw;
             }
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("ResetLink")]
+        public IActionResult ResetLink(string password, string confirmPassword)
+        {
+            try
+            {
+                var Email = User.FindFirst(ClaimTypes.Email).Value.ToString();
+                var result = iuserBL.ResetLink(Email, password, confirmPassword);
+
+                if (result != null)
+                {
+                    return this.Ok(new { status = true, Message = "Email Sent Successful" });
+                }
+                else
+                {
+                    return this.BadRequest(new { status = false, Message = "Reset email not sent" });
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
     }
 }
