@@ -1,7 +1,10 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 
 namespace FundooNotesApp.Controllers
 {
@@ -52,6 +55,28 @@ namespace FundooNotesApp.Controllers
                 else
                 {
                     return this.BadRequest(new { status = false, Message = "Login Unsuccessful"});
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public IActionResult ForgotPassword(string Email)
+        {
+            try
+            {
+                var result = iuserBL.ForgetPassword(Email);
+                if (result != null)
+                {
+                    return this.Ok(new { status = true, Message = "Email Sent Successful" });
+                }
+                else
+                {
+                    return this.BadRequest(new { status = false, Message = "Reset email not sent" });
                 }
             }
             catch (System.Exception)
