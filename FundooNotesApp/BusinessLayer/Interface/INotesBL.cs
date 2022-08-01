@@ -9,5 +9,6 @@ namespace BusinessLayer.Interface
     public interface INotesBL
     {
         public NotesEntity CreateNote(long UserId, NotesModel notesModel);
+        public NotesEntity DeleteNotes(long NoteId);
     }
 }
