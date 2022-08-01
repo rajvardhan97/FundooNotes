@@ -50,11 +50,11 @@ namespace FundooNotesApp.Controllers
                 var result = iuserBL.Userlogin(login);
                 if (result != null)
                 {
-                    return this.Ok(new { status = true, Message = "Login Successful", data = result});
+                    return this.Ok(new { success = true, Message = "Login Successful", data = result});
                 }
                 else
                 {
-                    return this.BadRequest(new { status = false, Message = "Login Unsuccessful"});
+                    return this.BadRequest(new { success = false, Message = "Login Unsuccessful"});
                 }
             }
             catch (System.Exception)
@@ -72,11 +72,11 @@ namespace FundooNotesApp.Controllers
                 var result = iuserBL.ForgetPassword(Email);
                 if (result != null)
                 {
-                    return this.Ok(new { status = true, Message = "Email Sent Successful" });
+                    return Ok(new { success = true, Message = "Email Sent Successful" });
                 }
                 else
                 {
-                    return this.BadRequest(new { status = false, Message = "Reset email not sent" });
+                    return BadRequest(new { success = false, Message = "Reset email not sent" });
                 }
             }
             catch (System.Exception)
@@ -97,11 +97,11 @@ namespace FundooNotesApp.Controllers
 
                 if (result != null)
                 {
-                    return this.Ok(new { status = true, Message = "Email Sent Successful" });
+                    return Ok(new { sucess = true, Message = "Password Reset Successfully" });
                 }
                 else
                 {
-                    return this.BadRequest(new { status = false, Message = "Reset email not sent" });
+                    return BadRequest(new { success = false, Message = "Password Reset Unsuccessful" });
                 }
             }
             catch (System.Exception)

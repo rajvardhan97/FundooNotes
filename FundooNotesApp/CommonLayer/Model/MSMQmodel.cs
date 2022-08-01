@@ -14,6 +14,7 @@ namespace CommonLayer.Model
         public void sendData2Queue(string Token)
         {
             messgaeQueue.Path = @".\private$\Token";
+
             if(!MessageQueue.Exists(messgaeQueue.Path))
             {
                 MessageQueue.Create(messgaeQueue.Path);
@@ -36,14 +37,12 @@ namespace CommonLayer.Model
             var SMTP = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("rajvardhansingh2609@gmail.com", "xkjdxufujqonoyrf"),
+                Credentials = new NetworkCredential("mightg909@gmail.com", "teqevbacyixjycmc"),
                 EnableSsl = true
             };
-            SMTP.Send("rajvardhansingh2609@gmail.com", "rajvardhansingh2609@gmail.com", subject, Body);
+            SMTP.Send("mightg909@gmail.com", "mightg909@gmail.com", subject, Body);
             messgaeQueue.BeginReceive();
 
         }
-
-      
     }
 }
