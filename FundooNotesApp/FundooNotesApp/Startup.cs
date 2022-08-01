@@ -86,6 +86,9 @@ namespace FundooNotesApp
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
 
+            services.AddTransient<INotesBL, NotesBL>();
+            services.AddTransient<INotesRL, NotesRL>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
