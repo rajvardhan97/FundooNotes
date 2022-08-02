@@ -14,12 +14,9 @@ namespace RepositoryLayer.Service
     {
         private readonly FundooContext fundooContext;
 
-        private readonly IConfiguration configuration;
-
-        public NotesRL(FundooContext fundooContext, IConfiguration configuration)
+        public NotesRL(FundooContext fundooContext)
         {
             this.fundooContext = fundooContext;
-            this.configuration = configuration;
         }
 
         public NotesEntity CreateNote(long UserId,NotesModel notesModel)
@@ -37,6 +34,7 @@ namespace RepositoryLayer.Service
                 notesEntity.Trash = notesModel.Trash;
                 notesEntity.Created = notesModel.Created;
                 notesEntity.Edited = notesModel.Edited;
+                notesEntity.UserId = UserId;
 
                 fundooContext.NotesTable.Add(notesEntity);
                 int result = fundooContext.SaveChanges();
@@ -106,5 +104,21 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public List<NotesEntity> GetNote(long NotesId)
+        {
+            try
+            {
+                var Note = fundooContext.NotesTable.Where(X => X.NoteId == NotesId).FirstOrDefault();
+                if (Note != null)
+                {
+                    return fundooContext.NotesTable.Where(list => list.NoteId == NotesId).ToList();
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
