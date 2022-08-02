@@ -73,5 +73,16 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+        public NotesEntity PinNote(long NoteId, long userId)
+        {
+            try
+            {
+                return notesRL.PinNote(NoteId, userId);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
     }
 }

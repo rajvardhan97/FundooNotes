@@ -125,19 +125,19 @@ namespace RepositoryLayer.Service
         {
             try
             {
-                var response = fundooContext.NotesTable.Where(A => A.NoteId == NoteId && A.UserId == userId).FirstOrDefault();
-                if (response != null)
+                var data = fundooContext.NotesTable.Where(A => A.NoteId == NoteId && A.UserId == userId).FirstOrDefault();
+                if (data != null)
                 {
-                    if (response.Archive == false)
+                    if (data.Archive == false)
                     {
-                        response.Archive = true;
+                        data.Archive = true;
                     }
                     else
                     {
-                        response.Archive = false;
+                        data.Archive = false;
                     }
                     fundooContext.SaveChanges();
-                    return response;
+                    return data;
                 }
                 else
                 {
@@ -150,5 +150,26 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public NotesEntity PinNote(long NoteId, long userId)
+        {
+            var pin = fundooContext.NotesTable.Where(p => p.NoteId == NoteId && p.UserId == userId).FirstOrDefault();
+            if (pin != null)
+            {
+                if (pin.Pin == false)
+                {
+                    pin.Pin = true;
+                }
+                else
+                {
+                    pin.Pin = false;
+                }
+                fundooContext.SaveChanges();
+                return pin;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
