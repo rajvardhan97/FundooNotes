@@ -14,5 +14,6 @@ namespace BusinessLayer.Interface
         public List<NotesEntity> GetNote(long NotesId);
         public NotesEntity ArchiveNote(long NoteId, long userId);
         public NotesEntity PinNote(long NoteId, long userId);
+        public NotesEntity TrashNote(long NotesId, long userId);
     }
 }

@@ -171,5 +171,28 @@ namespace RepositoryLayer.Service
                 return null;
             }
         }
+
+        public NotesEntity TrashNote(long NotesId, long userId)
+        {
+            var trashed = fundooContext.NotesTable.Where(t => t.NoteId == NotesId && t.UserId == userId).FirstOrDefault();
+            if (trashed != null)
+            {
+                if (trashed.Trash == false)
+                {
+                    trashed.Trash = true;
+                }
+                else
+                {
+                    trashed.Trash = false;
+                }
+                fundooContext.SaveChanges();
+                return trashed;
+
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

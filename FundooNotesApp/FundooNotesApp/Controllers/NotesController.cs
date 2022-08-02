@@ -157,5 +157,29 @@ namespace FundooNotesApp.Controllers
                 throw;
             }
         }
+
+        [HttpPut]
+        [Route("Trash")]
+        public IActionResult TrashNote(long NotesId)
+        {
+            try
+            {
+                long userId = Convert.ToInt32(User.Claims.FirstOrDefault(t => t.Type == "userID").Value);
+                var result = notesBL.TrashNote(NotesId, userId);
+                if (result != null)
+                {
+                    return this.Ok(new { Success = true, message = "Trashed Successfully", data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Trash Unuccessful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }
