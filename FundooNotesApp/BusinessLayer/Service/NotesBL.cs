@@ -62,5 +62,16 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
-     }
+        public NotesEntity ArchiveNote(long NoteId, long userId)
+        {
+            try
+            {
+                return notesRL.ArchiveNote(NoteId, userId);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+    }
 }
