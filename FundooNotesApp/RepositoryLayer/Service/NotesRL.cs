@@ -79,5 +79,32 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public NotesEntity UpdateNote(NotesModel notesModel, long NoteId)
+        {
+            try
+            {
+                var update = fundooContext.NotesTable.Where(x => x.NoteId == NoteId).FirstOrDefault();
+                if (update != null)
+                {
+                    update.Title = notesModel.Title;
+                    update.Description = notesModel.Description;
+                    update.Reminder = notesModel.Reminder;
+                    update.Color = notesModel.Color;
+                    update.Image = notesModel.Image;
+                    fundooContext.NotesTable.Update(update);
+                    fundooContext.SaveChanges();
+                    return update;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }
