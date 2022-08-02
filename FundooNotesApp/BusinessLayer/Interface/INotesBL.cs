@@ -15,5 +15,6 @@ namespace BusinessLayer.Interface
         public NotesEntity ArchiveNote(long NoteId, long userId);
         public NotesEntity PinNote(long NoteId, long userId);
         public NotesEntity TrashNote(long NotesId, long userId);
+        public NotesEntity NoteColor(long NoteId, string addcolor);
     }
 }

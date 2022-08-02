@@ -108,12 +108,15 @@ namespace RepositoryLayer.Service
         {
             try
             {
-                var Note = fundooContext.NotesTable.Where(X => X.NoteId == NotesId).FirstOrDefault();
+                var Note = fundooContext.NotesTable.Where(x => x.NoteId == NotesId).FirstOrDefault();
                 if (Note != null)
                 {
                     return fundooContext.NotesTable.Where(list => list.NoteId == NotesId).ToList();
                 }
-                return null;
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception)
             {
@@ -188,6 +191,29 @@ namespace RepositoryLayer.Service
                 fundooContext.SaveChanges();
                 return trashed;
 
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public NotesEntity NoteColor(long NoteId, string addcolor)
+        {
+            var note = fundooContext.NotesTable.Where(c => c.NoteId == NoteId).FirstOrDefault();
+            if (note != null)
+            {
+                if (addcolor != null)
+                {
+                    note.Color = addcolor;
+                    fundooContext.NotesTable.Update(note);
+                    fundooContext.SaveChanges();
+                    return note;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
