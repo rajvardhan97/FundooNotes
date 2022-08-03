@@ -220,5 +220,38 @@ namespace RepositoryLayer.Service
                 return null;
             }
         }
+
+	public NotesEntity UploadImage(string filePath, long noteId)
+        {
+            try
+            {
+                var Notes = fundooContext.NotesTable.First(e => e.NoteId == noteId);
+                if (Notes != null)
+                {
+                    Account account = new Account("dckjkypmk", "985331628442736", "BW90HnbQRtOxoayIUD9i1WtXq5I");
+                    Cloudinary cloudinary = new Cloudinary(account);
+                    ImageUploadParams uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(filePath),
+                        PublicId = Notes.Title
+                    };
+
+                    ImageUploadResult uploadResult = cloudinary.Upload(uploadParams);
+
+                    Notes.Image = uploadResult.Url.ToString();
+                    fundooContext.SaveChanges();
+                    return Notes;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

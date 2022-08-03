@@ -106,5 +106,16 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+	public NotesEntity UploadImage(string filePath, long noteId)
+        {
+            try
+            {
+                return notesRL.UploadImage(filePath, noteId);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
     }
 }

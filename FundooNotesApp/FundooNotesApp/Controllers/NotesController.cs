@@ -201,5 +201,28 @@ namespace FundooNotesApp.Controllers
                 throw;
             }
         }
+
+	[HttpPut]
+        [Route("Image")]
+        public IActionResult AddImage(string filePath, long noteId)
+        {
+            try
+            {
+
+                var result = notesBL.UploadImage(filePath, noteId);
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Uploaded Success", data = result });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Upload Failed" });
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
