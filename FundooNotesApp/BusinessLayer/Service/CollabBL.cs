@@ -37,5 +37,16 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+        public IEnumerable<CollabEntity> GetCollab(long noteId, long userId)
+        {
+            try
+            {
+                return collabRL.GetCollab(noteId, userId);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
     }
 }

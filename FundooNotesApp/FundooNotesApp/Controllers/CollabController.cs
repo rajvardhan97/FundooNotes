@@ -43,10 +43,10 @@ namespace FundooNotesApp.Controllers
                 }
                 else
                 {
-                    return Unauthorized(new { Sucess = false, message = "Failed Collaboration" });
+                    return Unauthorized(new { Sucess = false, message = "Collaboration Failed" });
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -62,14 +62,38 @@ namespace FundooNotesApp.Controllers
                 var delete = collabBL.RemoveCollab(collabID, userId);
                 if (delete != null)
                 {
-                    return this.Ok(new { Success = true, message = "Collaboration Removed"});
+                    return Ok(new { Success = true, message = "Collaboration Removed"});
                 }
                 else
                 {
-                    return this.BadRequest(new { Success = false, message = "Unsuccessful" });
+                    return BadRequest(new { Success = false, message = "Unsuccessful" });
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("Get")]
+        public IActionResult GetAllCollabs(long noteId)
+        {
+            try
+            {
+                long userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userID").Value);
+                var notes = collabBL.GetCollab(noteId, userId);
+                if (notes != null)
+                {
+                    return Ok(new { Success = true, message = "Collaboration Successful", data = notes });
+
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "No Collaboration Found" });
+                }
+            }
+            catch (Exception ex)
             {
                 throw;
             }

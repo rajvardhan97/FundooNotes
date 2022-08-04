@@ -32,7 +32,7 @@ namespace CommonLayer.Model
             var msg = messgaeQueue.EndReceive(e.AsyncResult);
             string Token = msg.Body.ToString();
             string subject = "Fundoo Notes Reset Link";
-            string Body = Token;
+            string Body = "Reset Password Token: " + Token;
 
             var SMTP = new SmtpClient("smtp.gmail.com")
             {
