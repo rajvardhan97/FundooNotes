@@ -1,5 +1,9 @@
-﻿using CommonLayer.Model;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.Services.Client.AccountManagement;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
@@ -7,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Account = CloudinaryDotNet.Account;
 
 namespace RepositoryLayer.Service
 {
@@ -27,11 +32,6 @@ namespace RepositoryLayer.Service
                 notesEntity.Title = notesModel.Title;
                 notesEntity.Description = notesModel.Description;
                 notesEntity.Reminder = notesModel.Reminder;
-                notesEntity.Color = notesModel.Color;
-                notesEntity.Image = notesModel.Image;
-                notesEntity.Archive = notesModel.Archive;
-                notesEntity.Pin = notesModel.Pin;
-                notesEntity.Trash = notesModel.Trash;
                 notesEntity.Created = notesModel.Created;
                 notesEntity.Edited = notesModel.Edited;
                 notesEntity.UserId = UserId;
@@ -87,8 +87,8 @@ namespace RepositoryLayer.Service
                     update.Title = notesModel.Title;
                     update.Description = notesModel.Description;
                     update.Reminder = notesModel.Reminder;
-                    update.Color = notesModel.Color;
-                    update.Image = notesModel.Image;
+                    update.Created = notesModel.Created;
+                    update.Edited = DateTime.Now;
                     fundooContext.NotesTable.Update(update);
                     fundooContext.SaveChanges();
                     return update;
@@ -124,7 +124,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public NotesEntity ArchiveNote(long NoteId, long userId)
+        public bool ArchiveNote(long NoteId, long userId)
         {
             try
             {
@@ -140,7 +140,96 @@ namespace RepositoryLayer.Service
                         data.Archive = false;
                     }
                     fundooContext.SaveChanges();
-                    return data;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool PinNote(long NoteId, long userId)
+        {
+            try
+            {
+                var pin = fundooContext.NotesTable.Where(p => p.NoteId == NoteId && p.UserId == userId).FirstOrDefault();
+                if (pin != null)
+                {
+                    if (pin.Pin == false)
+                    {
+                        pin.Pin = true;
+                    }
+                    else
+                    {
+                        pin.Pin = false;
+                    }
+                    fundooContext.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public bool TrashNote(long NotesId, long userId)
+        {
+            try
+            {
+                var trashed = fundooContext.NotesTable.Where(t => t.NoteId == NotesId && t.UserId == userId).FirstOrDefault();
+                if (trashed != null)
+                {
+                    if (trashed.Trash == false)
+                    {
+                        trashed.Trash = true;
+                    }
+                    else
+                    {
+                        trashed.Trash = false;
+                    }
+                    fundooContext.SaveChanges();
+                    return true;
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public NotesEntity NoteColor(long NoteId, string addcolor)
+        {
+            try
+            {
+                var note = fundooContext.NotesTable.Where(c => c.NoteId == NoteId).FirstOrDefault();
+                if (note != null)
+                {
+                    if (addcolor != null)
+                    {
+                        note.Color = addcolor;
+                        fundooContext.NotesTable.Update(note);
+                        fundooContext.SaveChanges();
+                        return note;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {
@@ -153,75 +242,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public NotesEntity PinNote(long NoteId, long userId)
-        {
-            var pin = fundooContext.NotesTable.Where(p => p.NoteId == NoteId && p.UserId == userId).FirstOrDefault();
-            if (pin != null)
-            {
-                if (pin.Pin == false)
-                {
-                    pin.Pin = true;
-                }
-                else
-                {
-                    pin.Pin = false;
-                }
-                fundooContext.SaveChanges();
-                return pin;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public NotesEntity TrashNote(long NotesId, long userId)
-        {
-            var trashed = fundooContext.NotesTable.Where(t => t.NoteId == NotesId && t.UserId == userId).FirstOrDefault();
-            if (trashed != null)
-            {
-                if (trashed.Trash == false)
-                {
-                    trashed.Trash = true;
-                }
-                else
-                {
-                    trashed.Trash = false;
-                }
-                fundooContext.SaveChanges();
-                return trashed;
-
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public NotesEntity NoteColor(long NoteId, string addcolor)
-        {
-            var note = fundooContext.NotesTable.Where(c => c.NoteId == NoteId).FirstOrDefault();
-            if (note != null)
-            {
-                if (addcolor != null)
-                {
-                    note.Color = addcolor;
-                    fundooContext.NotesTable.Update(note);
-                    fundooContext.SaveChanges();
-                    return note;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-	public NotesEntity UploadImage(string filePath, long noteId)
+        public NotesEntity UploadImage(string filePath, long noteId)
         {
             try
             {

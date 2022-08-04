@@ -62,7 +62,7 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
-        public NotesEntity ArchiveNote(long NoteId, long userId)
+        public bool ArchiveNote(long NoteId, long userId)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
-        public NotesEntity PinNote(long NoteId, long userId)
+        public bool PinNote(long NoteId, long userId)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
-        public NotesEntity TrashNote(long NotesId, long userId)
+        public bool TrashNote(long NotesId, long userId)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
-	public NotesEntity UploadImage(string filePath, long noteId)
+        public NotesEntity UploadImage(string filePath, long noteId)
         {
             try
             {

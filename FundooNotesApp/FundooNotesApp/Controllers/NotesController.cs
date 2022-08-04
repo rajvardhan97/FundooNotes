@@ -92,7 +92,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("Read")]
+        [Route("Get")]
         public IActionResult GetNote(long NotesId)
         {
             try
@@ -194,7 +194,7 @@ namespace FundooNotesApp.Controllers
                     return this.Ok(new { Success = true, message = "Color Added Successfully", data = result });
                 }
                 else
-                    return this.BadRequest(new { Success = false, message = " Unsuccessful to add Color" });
+                    return this.BadRequest(new { Success = false, message = " Unsuccessful to add color" });
             }
             catch (Exception ex)
             {
@@ -202,7 +202,7 @@ namespace FundooNotesApp.Controllers
             }
         }
 
-	[HttpPut]
+        [HttpPut]
         [Route("Image")]
         public IActionResult AddImage(string filePath, long noteId)
         {
