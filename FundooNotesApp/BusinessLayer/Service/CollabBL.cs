@@ -26,5 +26,16 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+        public string RemoveCollab(long collabId, long userId)
+        {
+            try
+            {
+                return collabRL.RemoveCollab(collabId, userId);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
     }
 }

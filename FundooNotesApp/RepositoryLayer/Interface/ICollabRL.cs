@@ -9,5 +9,6 @@ namespace RepositoryLayer.Interface
     public interface ICollabRL
     {
         public CollabEntity AddCollab(CollabModel collabModel);
+        public string RemoveCollab(long collabId, long userId);
     }
 }

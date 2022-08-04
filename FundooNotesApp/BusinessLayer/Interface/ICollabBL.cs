@@ -9,6 +9,7 @@ namespace BusinessLayer.Interface
     public interface ICollabBL
     {
         public CollabEntity AddCollab(CollabModel collabModel);
+        public string RemoveCollab(long collabId, long userId);
 
     }
 }

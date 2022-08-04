@@ -47,5 +47,28 @@ namespace RepositoryLayer.Service
                 throw;
             }
         }
+
+        public string RemoveCollab(long collabId, long userId)
+        {
+            try
+            {
+                var collab = fundooContext.CollabTable.Where(X => X.CollabID == collabId).FirstOrDefault();
+                if (collab != null)
+                {
+                    fundooContext.CollabTable.Remove(collab);
+                    fundooContext.SaveChanges();
+                    return "Removed Successfully";
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            
+        }
     }
 }
