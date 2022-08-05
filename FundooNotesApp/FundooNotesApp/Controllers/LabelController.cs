@@ -116,5 +116,28 @@ namespace FundooNotesApp.Controllers
                 throw;
             }
         }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public IActionResult DeleteLabel(long labelID)
+        {
+            try
+            {
+                long userId = Convert.ToInt32(User.Claims.FirstOrDefault(X => X.Type == "userID").Value);
+                var delete = labelBL.DeleteLabel(labelID, userId);
+                if (delete != null)
+                {
+                    return Ok(new { Success = true, message = "Label Deleted Successfully" });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Label not Deleted" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

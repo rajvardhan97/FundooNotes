@@ -12,5 +12,6 @@ namespace BusinessLayer.Interface
         public IEnumerable<LabelEntity> GetAllLabel(long userId);
         public List<LabelEntity> Getlabel(long NotesId, long userId);
         public LabelEntity UpdateLabel(LabelModel labelModel, long labelID);
+        public LabelEntity DeleteLabel(long labelID, long userId);
     }
 }
