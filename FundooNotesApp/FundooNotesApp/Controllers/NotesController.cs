@@ -3,11 +3,16 @@ using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooNotesApp.Controllers
 {
@@ -17,10 +22,17 @@ namespace FundooNotesApp.Controllers
     public class NotesController : ControllerBase
     {
         private readonly INotesBL notesBL;
-        public NotesController(INotesBL notesBL)
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
+        private readonly FundooContext fundooContext;
+        public NotesController(INotesBL notesBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.notesBL = notesBL;
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
+            this.fundooContext = fundooContext;
         }
+
         [HttpPost]
         [Route("Create")]
         public IActionResult CreateNotes(NotesModel notesModel)
@@ -86,6 +98,28 @@ namespace FundooNotesApp.Controllers
                 }
             }
             catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetAll")]
+        public IActionResult GetAllNotes(long userId)
+        {
+            try
+            {
+                var notes = notesBL.GetAllNotes(userId);
+                if (notes != null)
+                {
+                    return Ok(new { Success = true, message = "All notes found Successfully", data = notes });
+
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "No Notes Found" });
+                }
+            }
+            catch (Exception ex)
             {
                 throw;
             }
@@ -224,5 +258,33 @@ namespace FundooNotesApp.Controllers
                 throw;
             }
         }
+
+        [HttpGet]
+        [Route("Redis")]
+        public async Task<IActionResult> GetAllCustomersUsingRedisCache()
+        {
+            var cacheKey = "NotesList";
+            string serializedNotesList;
+            var NotesList = new List<NotesEntity>();
+            var redisNotesList = await distributedCache.GetAsync(cacheKey);
+            if (redisNotesList != null)
+            {
+                serializedNotesList = Encoding.UTF8.GetString(redisNotesList);
+                NotesList = JsonConvert.DeserializeObject<List<NotesEntity>>(serializedNotesList);
+            }
+            else
+            {
+                NotesList = fundooContext.NotesTable.ToList();
+                serializedNotesList = JsonConvert.SerializeObject(NotesList);
+                redisNotesList = Encoding.UTF8.GetBytes(serializedNotesList);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(10))
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                await distributedCache.SetAsync(cacheKey, redisNotesList, options);
+            }
+            return Ok(NotesList);
+        }
+
+
     }
 }

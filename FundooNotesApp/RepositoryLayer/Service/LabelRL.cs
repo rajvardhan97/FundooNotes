@@ -74,7 +74,7 @@ namespace RepositoryLayer.Service
             try
             {
                 var update = fundooContext.LabelTable.Where(X => X.LabelID == labelID).FirstOrDefault();
-                if (update != null && update.LabelID == labelID)
+                if (update != null)
                 {
                     update.LabelName = labelModel.LabelName;
                     update.NoteId = labelModel.NoteId;

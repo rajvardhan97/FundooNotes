@@ -104,6 +104,19 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public IEnumerable<NotesEntity> GetAllNotes(long userId)
+        {
+            try
+            {
+                var result = fundooContext.NotesTable.ToList().Where(x => x.UserId == userId);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public List<NotesEntity> GetNote(long NotesId)
         {
             try

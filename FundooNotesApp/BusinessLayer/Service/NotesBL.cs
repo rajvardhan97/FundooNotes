@@ -51,6 +51,17 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+        public IEnumerable<NotesEntity> GetAllNotes(long userId)
+        {
+            try
+            {
+                return notesRL.GetAllNotes(userId);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
         public List<NotesEntity> GetNote(long NotesId)
         {
             try
