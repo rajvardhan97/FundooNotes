@@ -9,5 +9,6 @@ namespace RepositoryLayer.Interface
     public interface ILabelRL
     {
         public LabelEntity AddLabel(LabelModel labelModel);
+        public IEnumerable<LabelEntity> GetLabel(long userId);
     }
 }
