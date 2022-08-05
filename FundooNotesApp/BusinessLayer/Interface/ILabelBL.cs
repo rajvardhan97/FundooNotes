@@ -9,6 +9,8 @@ namespace BusinessLayer.Interface
      public interface ILabelBL
     {
         public LabelEntity AddLabel(LabelModel labelModel);
-        public IEnumerable<LabelEntity> GetLabel(long userId);
+        public IEnumerable<LabelEntity> GetAllLabel(long userId);
+        public List<LabelEntity> Getlabel(long NotesId, long userId);
+        public LabelEntity UpdateLabel(LabelModel labelModel, long labelID);
     }
 }

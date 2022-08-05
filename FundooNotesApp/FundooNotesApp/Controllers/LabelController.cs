@@ -52,12 +52,12 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("Get")]
-        public IActionResult GetAllLabels(long userId)
+        [Route("Get All")]
+        public IActionResult GetAllLabel(long userId)
         {
             try
             {
-                var label = labelBL.GetLabel(userId);
+                var label = labelBL.GetAllLabel(userId);
                 if (label != null)
                 {
                     return Ok(new { Success = true, Message = " Displaying Label Successfully", data = label });
@@ -65,6 +65,50 @@ namespace FundooNotesApp.Controllers
                 else
                 {
                     return BadRequest(new { Success = false, Message = "No label found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("Get")]
+        public IActionResult Getlabel(long NoteId)
+        {
+            try
+            {
+                long userId = Convert.ToInt32(User.Claims.FirstOrDefault(X => X.Type == "userID").Value);
+                var label = labelBL.Getlabel(NoteId, userId);
+                if (label != null)
+                {
+                    return Ok(new { Success = true, message = "Label found Successfully", data = label });
+                }
+                else
+                    return BadRequest(new { Success = false, message = "Label not Found" });
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        public IActionResult UpdateLabel(LabelModel labelModel, long labelID)
+        {
+            try
+            {
+                long userid = Convert.ToInt32(User.Claims.FirstOrDefault(X => X.Type == "userID").Value);
+                var result = labelBL.UpdateLabel(labelModel, labelID);
+                if (result != null)
+                {
+                    return Ok(new { Success = true, message = "Label Updated Successfully", data = result });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, message = "Label Not Updated" });
                 }
             }
             catch (Exception ex)
