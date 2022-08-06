@@ -97,7 +97,7 @@ namespace FundooNotesApp
 
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost:4455";
+                options.Configuration = "localhost:6379";
             });
             services.AddMemoryCache();
 
