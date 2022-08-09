@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
@@ -26,12 +27,14 @@ namespace FundooNotesApp.Controllers
         private readonly FundooContext fundooContext;
         private readonly IMemoryCache memoryCache;
         private readonly IDistributedCache distributedCache;
-        public CollabController(ICollabBL collabBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache)
+        private readonly ILogger<UserController> logger;
+        public CollabController(ICollabBL collabBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<UserController> logger)
         {
             this.collabBL = collabBL;
             this.fundooContext = fundooContext;
             this.memoryCache = memoryCache;
             this.distributedCache = distributedCache;
+            this.logger = logger;
         }
         [HttpPost]
         [Route("Create")]
@@ -46,20 +49,24 @@ namespace FundooNotesApp.Controllers
                     var result = collabBL.AddCollab(collabModel);
                     if (result != null)
                     {
+                        logger.LogInformation("Collaboration successfully");
                         return Ok(new { Success = true, message = "Collaboration successful", data = result });
                     }
                     else
                     {
+                        logger.LogError("Collaboration Failed");
                         return BadRequest(new { Sucess = false, message = "Collaboration Failed" });
                     }
                 }
                 else
                 {
+                    logger.LogError("Collaboration Failed");
                     return Unauthorized(new { Sucess = false, message = "Collaboration Failed" });
                 }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
@@ -74,15 +81,18 @@ namespace FundooNotesApp.Controllers
                 var delete = collabBL.RemoveCollab(collabID, userId);
                 if (delete != null)
                 {
+                    logger.LogInformation("Collaboration Removed Successfully");
                     return Ok(new { Success = true, message = "Collaboration Removed"});
                 }
                 else
                 {
+                    logger.LogError("Unsuccessful to Remove Collaboration");
                     return BadRequest(new { Success = false, message = "Unsuccessful" });
                 }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
@@ -97,16 +107,19 @@ namespace FundooNotesApp.Controllers
                 var notes = collabBL.GetCollab(noteId, userId);
                 if (notes != null)
                 {
+                    logger.LogInformation("Collaboration Found Successfully");
                     return Ok(new { Success = true, message = "Collaboration Successful", data = notes });
 
                 }
                 else
                 {
+                    logger.LogError("No Collaboration Found");
                     return BadRequest(new { Success = false, message = "No Collaboration Found" });
                 }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
@@ -26,13 +27,15 @@ namespace FundooNotesApp.Controllers
         private readonly FundooContext fundooContext;
         private readonly IMemoryCache memoryCache;
         private readonly IDistributedCache distributedCache;
+        private readonly ILogger<UserController> logger;
 
-        public LabelController(ILabelBL labelBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache)
+        public LabelController(ILabelBL labelBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<UserController> logger)
         {
             this.labelBL = labelBL;
             this.fundooContext = fundooContext;
             this.memoryCache = memoryCache;
             this.distributedCache = distributedCache;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -48,17 +51,24 @@ namespace FundooNotesApp.Controllers
                     var result = labelBL.AddLabel(labelModel);
                     if (result != null)
                     {
+                        logger.LogInformation("Label created successfully");
                         return Ok(new { Success = true, Message = "Label created successfully", data = result });
                     }
                     else
                     {
+                        logger.LogError("Label not created");
                         return BadRequest(new { Success = false, Message = "Label is not created" });
                     }
                 }
-                return this.Unauthorized(new { Success = false, Message = "Unauthorized Access" });
+                else
+                {
+                    logger.LogError("Unauthorized User");
+                    return Unauthorized(new { Success = false, Message = "Unauthorized Access" });
+                }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
@@ -72,15 +82,18 @@ namespace FundooNotesApp.Controllers
                 var label = labelBL.GetAllLabel(userId);
                 if (label != null)
                 {
+                    logger.LogInformation("Displaying All labels Successfully");
                     return Ok(new { Success = true, Message = " Displaying Label Successfully", data = label });
                 }
                 else
                 {
+                    logger.LogError("No label found");
                     return BadRequest(new { Success = false, Message = "No label found" });
                 }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
@@ -95,13 +108,18 @@ namespace FundooNotesApp.Controllers
                 var label = labelBL.Getlabel(NoteId, userId);
                 if (label != null)
                 {
+                    logger.LogInformation("Label found Successfully");
                     return Ok(new { Success = true, message = "Label found Successfully", data = label });
                 }
                 else
+                {
+                    logger.LogError("No label found");
                     return BadRequest(new { Success = false, message = "Label not Found" });
+                }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
@@ -116,15 +134,18 @@ namespace FundooNotesApp.Controllers
                 var result = labelBL.UpdateLabel(labelModel, labelID);
                 if (result != null)
                 {
+                    logger.LogInformation("Label Updated Successfully");
                     return Ok(new { Success = true, message = "Label Updated Successfully", data = result });
                 }
                 else
                 {
+                    logger.LogError("Label Not Updated");
                     return BadRequest(new { Success = false, message = "Label Not Updated" });
                 }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
@@ -139,15 +160,18 @@ namespace FundooNotesApp.Controllers
                 var delete = labelBL.DeleteLabel(labelID, userId);
                 if (delete != null)
                 {
+                    logger.LogInformation("Label Deleted Successfully");
                     return Ok(new { Success = true, message = "Label Deleted Successfully" });
                 }
                 else
                 {
+                    logger.LogError("Label Not Deleted");
                     return BadRequest(new { Success = false, message = "Label not Deleted" });
                 }
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 throw;
             }
         }
