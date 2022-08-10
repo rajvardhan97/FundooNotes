@@ -27,8 +27,8 @@ namespace FundooNotesApp.Controllers
         private readonly FundooContext fundooContext;
         private readonly IMemoryCache memoryCache;
         private readonly IDistributedCache distributedCache;
-        private readonly ILogger<UserController> logger;
-        public CollabController(ICollabBL collabBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<UserController> logger)
+        private readonly ILogger<CollabController> logger;
+        public CollabController(ICollabBL collabBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<CollabController> logger)
         {
             this.collabBL = collabBL;
             this.fundooContext = fundooContext;

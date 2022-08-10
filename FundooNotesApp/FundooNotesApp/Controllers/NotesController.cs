@@ -26,8 +26,8 @@ namespace FundooNotesApp.Controllers
         private readonly IMemoryCache memoryCache;
         private readonly IDistributedCache distributedCache;
         private readonly FundooContext fundooContext;
-        private readonly ILogger<UserController> logger;
-        public NotesController(INotesBL notesBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<UserController> logger)
+        private readonly ILogger<NotesController> logger;
+        public NotesController(INotesBL notesBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<NotesController> logger)
         {
             this.notesBL = notesBL;
             this.memoryCache = memoryCache;

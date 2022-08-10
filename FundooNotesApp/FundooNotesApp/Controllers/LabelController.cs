@@ -27,9 +27,9 @@ namespace FundooNotesApp.Controllers
         private readonly FundooContext fundooContext;
         private readonly IMemoryCache memoryCache;
         private readonly IDistributedCache distributedCache;
-        private readonly ILogger<UserController> logger;
+        private readonly ILogger<LabelController> logger;
 
-        public LabelController(ILabelBL labelBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<UserController> logger)
+        public LabelController(ILabelBL labelBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache, ILogger<LabelController> logger)
         {
             this.labelBL = labelBL;
             this.fundooContext = fundooContext;
